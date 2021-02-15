@@ -17,27 +17,33 @@ class FeedController extends AbstractController
     /**
      * @Route("/feed", name="feed")
      */
-    public function index(Request $request): Response
+    public function index (Request $request): Response
     {
         $tweet = new Tweet();
-
-
+        $user = $this->getUser();
+      $tweets =  $this->getUser()->getTweets();
 
         $form = $this->createForm(TweetType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()&& $form->isValid()) {
-             $tweet = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $tweet = $form->getData();
             $tweet->setUser($this->getUser());
-             $entityManager = $this->getDoctrine()->getManager();
-             $entityManager->persist($tweet);
-             $entityManager->flush();
-             //$this->redirectToRoute();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($tweet);
+            $entityManager->flush();
+            //$this->redirectToRoute();
+
             //flashbag
         }
+
+
         return $this->render('feed/index.html.twig', [
-            'form' => $form->createView(),
+            'form'            => $form->createView(),
             'controller_name' => 'FeedController',
+            'tweets' => $tweets,
+            'user'=> $user,
         ]);
     }
 }

@@ -47,9 +47,15 @@ class User implements UserInterface
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Tweet::class, mappedBy="user")
+     */
+    private $tweets;
+
     public function __construct()
     {
         $this->follows = new ArrayCollection();
+        $this->tweets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +179,36 @@ class User implements UserInterface
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tweet[]
+     */
+    public function getTweets(): Collection
+    {
+        return $this->tweets;
+    }
+
+    public function addTweet(Tweet $tweet): self
+    {
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets[] = $tweet;
+            $tweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): self
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
+            }
+        }
 
         return $this;
     }

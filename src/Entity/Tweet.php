@@ -18,15 +18,16 @@ class Tweet
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tweets")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $User;
+    private $user;
 
     /**
      * @ORM\Column(type="string", length=400)
      */
     private $Text;
+
 
     public function getId(): ?int
     {
@@ -35,16 +36,17 @@ class Tweet
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
-    // $user->getTweets()
 
-    public function setUser(?User $User): self
+
+    public function setUser(?User $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
+
 
     public function getText(): ?string
     {
@@ -57,4 +59,5 @@ class Tweet
 
         return $this;
     }
+
 }
