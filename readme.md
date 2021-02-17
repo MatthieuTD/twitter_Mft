@@ -1,5 +1,13 @@
 # Projet Twitter MFT 
 
+## pages
+
+- /login 
+- /account
+- /feed
+- /register
+
+
 ## Fonctionnalitées
 
 - Follow/unfolow
@@ -8,4 +16,5 @@
 - Système de retweet
 - Login
 - Register 
+
 
