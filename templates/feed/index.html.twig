@@ -9,17 +9,70 @@
 </style>
     <a href="/account" >Mon profil</a>
     <a href="/logout" >Deconnexion</a>
-    {{ form(form) }}
+
+    {{ form(form, {'action': path('add_tweet')}) }}
 
 
+    <h1>Liste des ReTweets de {{ userP }}</h1>
+    {% for tweet in retweet %}
+
+        {{ tweet.user}}
+        {{ tweet.text }}
+        <br>
+
+    {% endfor %}
 
 <h1>Liste des tweets</h1>
-    <p>
-        {% for tweet in tweets %}
-            {{ user }}
-            {{ tweet.text }}
-            <br>
+
+<h1>VERSION 2</h1>
+
+    {% for tweet in tweets %}
+        {% set follow = "/follow" %}
+        {% set followname = "follow" %}
+        {% set break = 'false' %}
+
+        {% for fo_user in follow_users  %}
+
+            {% if tweet.user == fo_user and break != 'true' %}
+                {% set follow = "/un/follow" %}
+                {% set followname = "UnFollow" %}
+
+                {% set break = 'true' %}
+
+            {% elseif break != 'true'  %}
+                {% set follow = "/follow" %}
+                {% set followname = "Follow" %}
+
+
+            {% endif %}
+
         {% endfor %}
-    </p>
+
+
+
+
+        {% if tweet.user != userP %}
+            <a href="{{ follow }}?userFollow={{ tweet.user }}">{{ followname }}</a>
+            {% set breake = 'false' %}
+            {% for retweet in retweet %}
+
+
+                {% if tweet.id == retweet.id and breake != 'true' %}
+                    {% set breake = 'true' %}
+                {% endif %}
+
+            {% endfor %}
+        {% if breake == 'false' %}
+            <a href="/re/tweet?tweetId={{ tweet.id }}&userRetweet={{ userP }}">Retwett</a>
+
+        {% endif %}
+        {% endif %}
+
+
+
+        {{ tweet.user }}
+        {{ tweet.text }}
+        <br>
+    {% endfor %}
 
 {% endblock %}

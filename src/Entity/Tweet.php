@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TweetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +29,16 @@ class Tweet
      * @ORM\Column(type="string", length=400)
      */
     private $Text;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="reTweets")
+     */
+    private $reTweet;
+
+    public function __construct()
+    {
+        $this->reTweet = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -56,6 +68,30 @@ class Tweet
     public function setText(string $Text): self
     {
         $this->Text = $Text;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getReTweet(): Collection
+    {
+        return $this->reTweet;
+    }
+
+    public function addReTweet(User $reTweet): self
+    {
+        if (!$this->reTweet->contains($reTweet)) {
+            $this->reTweet[] = $reTweet;
+        }
+
+        return $this;
+    }
+
+    public function removeReTweet(User $reTweet): self
+    {
+        $this->reTweet->removeElement($reTweet);
 
         return $this;
     }

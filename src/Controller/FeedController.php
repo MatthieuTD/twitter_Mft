@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Entity\User;
+use App\Form\FollowType;
 use App\Form\TweetType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -19,31 +20,27 @@ class FeedController extends AbstractController
      */
     public function index (Request $request): Response
     {
+        $repository = $this->getDoctrine()->getRepository(Tweet::class);
+
         $tweet = new Tweet();
         $user = $this->getUser();
-      $tweets =  $this->getUser()->getTweets();
+        $follow_users =  $this->getUser()->getFollower();
 
+        $tweets =  $repository->findAll();
         $form = $this->createForm(TweetType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $tweet = $form->getData();
-            $tweet->setUser($this->getUser());
+        $retweet = $this->getUser()->getReTweets();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tweet);
-            $entityManager->flush();
-            //$this->redirectToRoute();
-
-            //flashbag
-        }
 
 
         return $this->render('feed/index.html.twig', [
             'form'            => $form->createView(),
             'controller_name' => 'FeedController',
             'tweets' => $tweets,
-            'user'=> $user,
+            'follow_users' => $follow_users,
+            'retweet' => $retweet,
+            'userP'=> $user,
         ]);
     }
 }

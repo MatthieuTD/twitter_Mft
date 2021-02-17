@@ -37,10 +37,6 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class)
-     */
-    private $follows;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -52,10 +48,28 @@ class User implements UserInterface
      */
     private $tweets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="users")
+     */
+    private $follower;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="follower")
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Tweet::class, mappedBy="reTweet")
+     */
+    private $reTweets;
+
     public function __construct()
     {
         $this->follows = new ArrayCollection();
         $this->tweets = new ArrayCollection();
+        $this->follower = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->reTweets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,29 +153,6 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|self[]
-     */
-    public function getFollows(): Collection
-    {
-        return $this->follows;
-    }
-
-    public function addFollow(self $follow): self
-    {
-        if (!$this->follows->contains($follow)) {
-            $this->follows[] = $follow;
-        }
-
-        return $this;
-    }
-
-    public function removeFollow(self $follow): self
-    {
-        $this->follows->removeElement($follow);
-
-        return $this;
-    }
 
     public function __toString ()
     {
@@ -208,6 +199,84 @@ class User implements UserInterface
             if ($tweet->getUser() === $this) {
                 $tweet->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getFollower(): Collection
+    {
+        return $this->follower;
+    }
+
+    public function addFollower(self $follower): self
+    {
+        if (!$this->follower->contains($follower)) {
+            $this->follower[] = $follower;
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(self $follower): self
+    {
+        $this->follower->removeElement($follower);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(self $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(self $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFollower($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tweet[]
+     */
+    public function getReTweets(): Collection
+    {
+        return $this->reTweets;
+    }
+
+    public function addReTweet(Tweet $reTweet): self
+    {
+        if (!$this->reTweets->contains($reTweet)) {
+            $this->reTweets[] = $reTweet;
+            $reTweet->addReTweet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReTweet(Tweet $reTweet): self
+    {
+        if ($this->reTweets->removeElement($reTweet)) {
+            $reTweet->removeReTweet($this);
         }
 
         return $this;
