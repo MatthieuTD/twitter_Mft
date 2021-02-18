@@ -1,18 +1,20 @@
 # Projet Twitter MFT 
 
+``git clone https://github.com/MatthieuTD/twitter_Mft.git``
+
 ## Lancer le projet
 
  1- ````composer install````
  
- 2- Mettre vos identifiants dans le fichier .env
+ 2- Mettre vos identifiants de Bdd dans le fichier .env
+  
+ 3- Créer votre BDD : ``php bin/console d:s:u --force``
  
- 3- ``symfony server:start
- ``
- 
- 4- Créer votre BDD : ``php bin/console d:s:u --force``
- 
- 3- Load le jeux de données``php bin/console doctrine:fixtures:load
+ 4- Load le jeu de données``php bin/console doctrine:fixtures:load
 ``
+
+ 5- ``symfony server:start
+ ``
 
 ## pages
 
