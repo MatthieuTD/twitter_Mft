@@ -9,7 +9,7 @@
  3- ``symfony server:start
  ``
  
- 4- Créer votre BDD : `php bin/console d:s:u --force``
+ 4- Créer votre BDD : ``php bin/console d:s:u --force``
  
  3- Load le jeux de données``php bin/console doctrine:fixtures:load
 ``
