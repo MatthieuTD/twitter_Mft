@@ -10,6 +10,8 @@
     <a href="/account" >Mon profil</a>
     <a href="/logout" >Deconnexion</a>
 
+    <h1>Ajout de tweet</h1>
+
     {{ form(form, {'action': path('add_tweet')}) }}
 
 
@@ -24,7 +26,7 @@
 
 <h1>Liste des tweets</h1>
 
-<h1>VERSION 2</h1>
+
 
     {% for tweet in tweets %}
         {% set follow = "/follow" %}
