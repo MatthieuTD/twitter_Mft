@@ -1,5 +1,7 @@
 # Projet Twitter MFT 
-
+- Matthieu THOLOT
+- Tristan Autin
+- Fabrice Cottin
 ## Lancer le projet
 
  1- ````composer install````
