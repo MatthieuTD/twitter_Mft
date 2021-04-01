@@ -1,4 +1,4 @@
-# Projet Twitter MFT 
+# Projet Twitter MFT  COUR PHP
 - Matthieu THOLOT
 - Tristan Autin
 - Fabrice Cottin
